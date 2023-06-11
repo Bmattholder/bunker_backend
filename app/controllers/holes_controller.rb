@@ -17,6 +17,10 @@ class HolesController < ApplicationController
   def create
     @hole = Hole.new(hole_params)
 
+    if params.dig(:hole, :course_id)
+      @hole.course = Course.find(params[:hole][:course_id])
+    end
+
     if @hole.save
       render json: @hole, status: :created, location: @hole
     else

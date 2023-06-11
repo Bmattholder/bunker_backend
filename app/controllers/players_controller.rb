@@ -15,7 +15,11 @@ class PlayersController < ApplicationController
 
   # POST /players
   def create
-    @player = Player.new(player_params)
+    @player = Player.new(player_params.except(:scorecard_id))
+
+    if params.dig(:player, :scorecard_id)
+      @player.scorecard = Scorecard.find(params[:player][:scorecard_id])
+    end
 
     if @player.save
       render json: @player, status: :created, location: @player
@@ -46,6 +50,6 @@ class PlayersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_params
-      params.require(:player).permit(:name, :scores)
+      params.require(:player).permit(:scorecard_id, :name, scores: [])
     end
 end

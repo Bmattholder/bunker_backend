@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_09_201153) do
+ActiveRecord::Schema.define(version: 2023_06_11_012653) do
 
   create_table "courses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 2023_06_09_201153) do
     t.integer "par"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "course_id", null: false
+    t.index ["course_id"], name: "index_holes_on_course_id"
   end
 
   create_table "players", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -31,11 +33,15 @@ ActiveRecord::Schema.define(version: 2023_06_09_201153) do
     t.text "scores"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "scorecard_id", null: false
+    t.index ["scorecard_id"], name: "index_players_on_scorecard_id"
   end
 
   create_table "scorecards", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "course_id", null: false
+    t.index ["course_id"], name: "index_scorecards_on_course_id"
   end
 
   create_table "tees", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -43,6 +49,12 @@ ActiveRecord::Schema.define(version: 2023_06_09_201153) do
     t.integer "yardage"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "hole_id", null: false
+    t.index ["hole_id"], name: "index_tees_on_hole_id"
   end
 
+  add_foreign_key "holes", "courses"
+  add_foreign_key "players", "scorecards"
+  add_foreign_key "scorecards", "courses"
+  add_foreign_key "tees", "holes"
 end

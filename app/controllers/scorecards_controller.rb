@@ -15,8 +15,12 @@ class ScorecardsController < ApplicationController
 
   # POST /scorecards
   def create
-    @scorecard = Scorecard.new(scorecard_params)
-
+    @scorecard = Scorecard.new(scorecard_params.except(:course_id))
+  
+    if params.dig(:scorecard, :course_id)
+      @scorecard.course = Course.find(params[:scorecard][:course_id])
+    end
+  
     if @scorecard.save
       render json: @scorecard, status: :created, location: @scorecard
     else
@@ -46,6 +50,6 @@ class ScorecardsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def scorecard_params
-      params.fetch(:scorecard, {})
+      params.require(:scorecard).permit(:course_id, players: [])
     end
 end

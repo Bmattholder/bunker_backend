@@ -17,6 +17,10 @@ class TeesController < ApplicationController
   def create
     @tee = Tee.new(tee_params)
 
+    if params.dig(:tee, :hole_id)
+      @tee.hole = Hole.find(params[:tee][:hole_id])
+    end
+
     if @tee.save
       render json: @tee, status: :created, location: @tee
     else
