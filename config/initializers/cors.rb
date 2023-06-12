@@ -7,7 +7,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     resources.each do |resource|
       resource resource,
         headers: :any,
-        methods: [:get, :post, :put, :patch, :delete, :options, :head]
+        methods: [:get, :post, :put, :patch, :delete, :options, :head],
+				expose: ['Access-Control-Allow-Origin']
     end
   end
 end
