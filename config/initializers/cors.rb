@@ -1,27 +1,13 @@
-# Be sure to restart your server when you modify this file.
-
-# Avoid CORS issues when API is called from the frontend app.
-# Handle Cross-Origin Resource Sharing (CORS) in order to accept cross-origin AJAX requests.
-
-# Read more: https://github.com/cyu/rack-cors
-
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins 'example.com'
-#
-#     resource '*',
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
-
-
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:3000' # Update with the appropriate origin of your React app
+    origins 'http://localhost:3000'
 
-    resource '/players',
-      headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+    resources = ['/scorecards', '/players', '/courses', '/holes', '/tees']
+
+    resources.each do |resource|
+      resource resource,
+        headers: :any,
+        methods: [:get, :post, :put, :patch, :delete, :options, :head]
+    end
   end
 end
